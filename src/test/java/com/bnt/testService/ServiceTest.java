@@ -1,6 +1,7 @@
 package com.bnt.testService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -39,6 +40,14 @@ public class ServiceTest {
         assertEquals(customer, aCustomer);
     }
 
+    // negative testcase for saveCustomer
+    @Test
+    public void customerSaveTest_If_Obj_IsNull(){
+        assertThrows(NullPointerException.class, ()->{
+            customerService.saveCustomer(null);
+        });
+    }
+
     @Test
     public void customerUdateTest(){
         Customer customer = new Customer(2,"jerry","abu dhabi");
@@ -46,6 +55,16 @@ public class ServiceTest {
         Customer aCustomer = customerService.updateCustomer(2, "jerry");
         assertEquals(customer, aCustomer);
     }
+
+    // negative test for cutomerUpdate
+    @Test
+    public void customerUpdateTest_If_Id_IsNotPresent() throws NullPointerException{
+        assertThrows(NullPointerException.class, ()->{
+            customerService.updateCustomer(0, "dune");
+        });
+    }
+
+
 
     @Test
     public void customerGetTest(){
@@ -61,12 +80,29 @@ public class ServiceTest {
         List<Customer> aCustomer = customerService.getCustomer();
         assertEquals(customer, aCustomer);
     }
+// negative testcase for getCustomer
+
+@Test
+public void getCustomer_If_Response_IsNull() {
+    assertThrows(NullPointerException.class, () -> {
+        customerService.getCustomer();
+    });
+
+}
 
     @Test
     public void deletecustomerTest(){
         int custId=1;
         customerService.deleteCustomer(custId);
          verify(customerRepository, times(1)).deleteCustomer(custId);
+    }
+
+// negative testCase for deleteCustomer
+    @Test
+    public void deleteCustomerTest_If_Id_Is_Not_Present(){
+        assertThrows(Exception.class, ()->{
+            customerService.deleteCustomer(0);
+        });
     }
 
 }

@@ -1,6 +1,7 @@
 package com.bnt.testController;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -8,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.util.Assert;
 
 import com.bnt.controller.CustomerController;
 import com.bnt.model.Customer;
@@ -44,16 +47,42 @@ public class CustomerControllerTest {
         assertEquals(customer, aCustomer);
     }
 
+    // @Test
+    // public void testCustomerSave_exception(){
+    //    Assertions.assertThrows(IllegalArgumentException.class, new TestCustomerNullInput());
+
+    // }
+
+    // Negative test for saveCustomer
+
     @Test
-    public void updateCustomerTest(){
+    public void testSaveCustomer_NullInput() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            customerController.saveCustomer(null);
+        });
+    }
+
+
+
+    @Test
+    public void updateCustomerTest() throws Exception{
         Customer customer = new Customer(2,"jack","berlin");
         when(customerService.updateCustomer(2, "jack")).thenReturn(customer);
         Customer aCustomer = customerController.upDateCustomer(2, "jack");
         assertEquals(customer, aCustomer);
     }
 
+    // Negative test for updateCustomer
+
     @Test
-    public void getCustomerTest(){
+    public void updateCustomerTest_Invalid_Id(){
+        assertThrows(Exception.class, ()->{
+            customerController.upDateCustomer(0, "nick");
+        });
+    }
+
+    @Test
+    public void getCustomerTest() throws Exception{
         List<Customer> customer = new ArrayList<>();
         Customer c1 = new Customer(1,"sma","berlin");
         Customer c2 = new Customer(2,"tom","abu dhabi");
@@ -68,11 +97,31 @@ public class CustomerControllerTest {
         assertEquals(customer, acustomer);
     }
 
+
+    // Negative test for getCustomer
     @Test
-    public void deleteCustomerTest(){
+public void getCustomer_If_Response_IsNull() {
+    assertThrows(NullPointerException.class, () -> {
+        customerController.getCustomer();
+    });
+}
+
+
+
+
+    @Test
+    public void deleteCustomerTest() throws Exception{
         int custId = 1;
         customerController.deleteCustomer(custId);
          verify(customerService, times(1)).deleteCustomer(custId);
+    }
+
+    // Negative test for deleteCustomer
+    @Test
+    public void deleteCustomerTest_If_Id_Is_Not_Present(){
+        assertThrows(Exception.class, ()->{
+            customerController.deleteCustomer(0);
+        });
     }
 
 }
