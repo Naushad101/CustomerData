@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.bnt.dao.CustomerRepository;
+import com.bnt.exceptions.DataIsNotPresent;
+import com.bnt.exceptions.ObjectIsNull;
 import com.bnt.model.Customer;
 import com.bnt.service.CustomerService;
 
@@ -33,7 +35,7 @@ public class ServiceTest {
     }
 
     @Test
-    public void customerSaveTest(){
+    public void customerSaveTest() throws ObjectIsNull{
         Customer customer = new Customer(1,"sam","berlin");
         when(customerRepository.saveCustomer(customer)).thenReturn(customer);
         Customer aCustomer = customerService.saveCustomer(customer);
@@ -49,7 +51,7 @@ public class ServiceTest {
     }
 
     @Test
-    public void customerUdateTest(){
+    public void customerUdateTest() throws DataIsNotPresent{
         Customer customer = new Customer(2,"jerry","abu dhabi");
         when(customerRepository.updateCustomer(2, "jerry")).thenReturn(customer);
         Customer aCustomer = customerService.updateCustomer(2, "jerry");
@@ -67,7 +69,7 @@ public class ServiceTest {
 
 
     @Test
-    public void customerGetTest(){
+    public void customerGetTest() throws ObjectIsNull{
         List<Customer> customer = new ArrayList<>();
         Customer c1 = new Customer(1,"sam","berlin");
         Customer c2 = new Customer(2,"Tom","abu dhabi");
@@ -91,7 +93,7 @@ public void getCustomer_If_Response_IsNull() {
 }
 
     @Test
-    public void deletecustomerTest(){
+    public void deletecustomerTest() throws DataIsNotPresent{
         int custId=1;
         customerService.deleteCustomer(custId);
          verify(customerRepository, times(1)).deleteCustomer(custId);

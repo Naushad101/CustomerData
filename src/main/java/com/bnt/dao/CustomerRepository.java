@@ -19,8 +19,10 @@ public class CustomerRepository {
     DataSource dataSource;
 
     public Customer saveCustomer(Customer customer){
+        if(customer==null){
+            throw new NullPointerException("Object is null");
+        }
         try{
-
             Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement("INSERT INTO customer (id, name,city) VALUES (?, ?, ?)");
             statement.setInt(1, customer.getId());
@@ -82,14 +84,14 @@ public class CustomerRepository {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM customer");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Customer customer = new Customer();
+                // Customer customer = new Customer();
                 int id=resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 String city = resultSet.getString("city");
-                customer.setId(id);
-                customer.setName(name);
-                customer.setCity(city);
-                res.add(customer);
+                // customer.setId(id);
+                // customer.setName(name);
+                // customer.setCity(city);
+                // res.add(customer);
                 
             }
             resultSet.close();
@@ -112,6 +114,26 @@ public class CustomerRepository {
         } catch (Exception e) {
             // TODO: handle exception
         }
+    }
+
+    public List<Integer> getId(){
+        List<Integer> ans = new ArrayList<>();
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement=connection.prepareStatement("SELECT id FROM customer");
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+                int id=resultSet.getInt("id");
+                ans.add(id);
+            }
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return ans;
     }
 
 }

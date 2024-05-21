@@ -1,6 +1,7 @@
 package com.bnt.testRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,6 +37,13 @@ public class TestCustomerRepository {
 
         assertEquals(customer, aCustomer);
 
+    }
+
+    @Test
+    public void saveCustomerTest_If_ObjIsNull(){
+        assertThrows(NullPointerException.class,()->{
+            customerRepository.saveCustomer(null);
+        });
     }
 
     @Test
